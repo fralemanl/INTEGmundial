@@ -1,5 +1,7 @@
 from pydantic import Field
-from database import SessionLocal
+from database import SessionLocal, engine, Base
+# Crear tablas automáticamente si no existen
+Base.metadata.create_all(bind=engine)
 from models import User, Match, Prediction, ChampionPrediction
 from pydantic import BaseModel
 from typing import Optional, List
