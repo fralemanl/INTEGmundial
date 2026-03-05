@@ -1,8 +1,8 @@
 from pydantic import Field
 from database import SessionLocal, engine, Base
-# Crear tablas automáticamente si no existen
-Base.metadata.create_all(bind=engine)
 from models import User, Match, Prediction, ChampionPrediction
+# Crear tablas automáticamente si no existen (después de importar todos los modelos)
+Base.metadata.create_all(bind=engine)
 from pydantic import BaseModel
 from typing import Optional, List
 from fastapi import Body
