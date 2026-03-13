@@ -30,6 +30,8 @@ export default function Welcome({user}) {
     return () => clearInterval(interval);
   }, []);
 
+
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 py-10 bg-gradient-to-br from-green-900 via-slate-900 to-black">
       <div className="flex flex-col md:flex-row items-center gap-10 mb-8">
@@ -39,14 +41,15 @@ export default function Welcome({user}) {
           className="w-80 h-auto object-contain drop-shadow-lg bg-white rounded-lg p-2"
         />
         <div className="text-center md:text-left">
+
           <h1 className="text-4xl md:text-5xl font-black text-green-400 mb-2 drop-shadow-lg">
-            te da la bienvenida
+            ¡Te da la bienvenida!
             <br />
-            {user.username}!
+            {user.username}
           </h1>
           <p className="text-lg md:text-xl text-slate-200 mb-4 max-w-xl">
-            Participa en la quiniela oficial del Mundial 2026, compite con tus
-            amigos y demuestra tus conocimientos futboleros.
+            Participa en la quiniela oficial del Mundial 2026, compite con tu
+            familia de INTEG y demuestra tus conocimientos futboleros.
           </p>
           <div className="flex flex-col md:flex-row gap-4 items-center md:items-start justify-center md:justify-start">
             <Link

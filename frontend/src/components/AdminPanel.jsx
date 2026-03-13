@@ -188,6 +188,7 @@ function AdminPanel() {
           winner: formData.winner !== undefined ? formData.winner : null,
           is_finished: formData.is_finished,
           phase: formData.phase,
+          stadium: formData.stadium,
         };
         await createMatch(payload);
       }
