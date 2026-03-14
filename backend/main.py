@@ -4,6 +4,9 @@ from models import User, Match, Prediction, ChampionPrediction
 from pydantic import BaseModel
 from typing import Optional, List
 from fastapi import Body
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # --- CLASES Pydantic FALTANTES ---
 class PasswordResetRequest(BaseModel):
@@ -124,7 +127,6 @@ class ChampionPredictionResponse(BaseModel):
         orm_mode = True
 from datetime import datetime
 from typing import List, Optional
-import hashlib
 
 # Modelos Pydantic necesarios para endpoints
 class UserResponse(BaseModel):
@@ -180,7 +182,10 @@ def get_db():
         db.close()
 
 def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode()).hexdigest()
+    return pwd_context.hash(password)
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
 
 
 # Update user endpoint
@@ -252,7 +257,7 @@ def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
         if not user:
             print(f"Login failed: user '{credentials.username}' not found.")
             raise HTTPException(status_code=401, detail="Usuario no encontrado")
-        if user.password != hash_password(credentials.password):
+        if not verify_password(credentials.password, user.password):
             print(f"Login failed: incorrect password for user '{credentials.username}'.")
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
         print(f"Login success for user '{credentials.username}'.")
