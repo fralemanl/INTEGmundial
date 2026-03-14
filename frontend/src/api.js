@@ -3,6 +3,9 @@ export const resetAll = (adminUserId) =>
   api.post(`/reset_all?admin_user_id=${adminUserId}`);
 // Champion Prediction
 export const getChampionPrediction = (userId) => api.get(`/champion/${userId}`);
+
+// Export
+export const exportPredictions = () => api.get("/export/predictions");
 import axios from "axios";
 
 const BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");

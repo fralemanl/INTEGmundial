@@ -503,6 +503,30 @@ def adjust_prediction_points(request: AdjustPointsRequest, db: Session = Depends
     db.refresh(prediction)
     return {"detail": f"Puntos actualizados a {request.new_points} para la predicción {request.prediction_id}"}
 
+# Endpoint de exportación de predicciones
+@app.get("/api/export/predictions")
+def export_predictions(db: Session = Depends(get_db)):
+    predictions = db.query(Prediction).filter(Prediction.match_id != None).all()
+    rows = []
+    for p in predictions:
+        user = db.query(User).filter(User.id == p.user_id).first()
+        match = db.query(Match).filter(Match.id == p.match_id).first()
+        if not user or not match:
+            continue
+        rows.append({
+            "Usuario": user.username,
+            "Email": user.email,
+            "Partido": f"{match.team_home} vs {match.team_away}",
+            "Fecha": match.match_date.isoformat() if match.match_date else "",
+            "Fase": match.phase or "",
+            "Pred. Local": p.predicted_home,
+            "Pred. Visitante": p.predicted_away,
+            "Ganador Pred.": p.winner or "",
+            "Resultado Real": f"{match.score_home}-{match.score_away}" if match.is_finished else "Pendiente",
+            "Puntos": p.points,
+        })
+    return rows
+
 # Endpoint de Clasificación
 @app.get("/api/leaderboard", response_model=List[LeaderboardEntry])
 def get_leaderboard(db: Session = Depends(get_db)):

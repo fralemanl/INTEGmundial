@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import * as XLSX from "xlsx";
 import {
   getMatches,
   createMatch,
@@ -9,6 +10,7 @@ import {
   resetUserPassword,
   deleteUser,
   resetAll,
+  exportPredictions,
 } from "../api";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
@@ -267,7 +269,7 @@ function AdminPanel() {
   return (
     <div>
       {/* Tabs */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6 flex-wrap">
         <button
           className={`px-6 py-2 rounded-lg font-bold text-white ${activeTab === "matches" ? "bg-green-600" : "bg-slate-700"}`}
           onClick={() => setActiveTab("matches")}
@@ -279,6 +281,19 @@ function AdminPanel() {
           onClick={() => setActiveTab("users")}
         >
           Usuarios
+        </button>
+        <button
+          className="px-6 py-2 rounded-lg font-bold text-white bg-blue-700 hover:bg-blue-600 ml-auto"
+          onClick={async () => {
+            const { data } = await exportPredictions();
+            if (!data || data.length === 0) { alert("No hay predicciones para exportar."); return; }
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Predicciones");
+            XLSX.writeFile(wb, "predicciones.xlsx");
+          }}
+        >
+          ⬇ Exportar Excel
         </button>
       </div>
 
