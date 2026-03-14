@@ -1,6 +1,3 @@
-// Hacer admin a un usuario (endpoint temporal)
-export const makeUserAdmin = (userId, secret) =>
-  api.put(`/users/${userId}/make_admin`, null, { params: { secret } });
 // Reset all (admin)
 export const resetAll = (adminUserId) =>
   api.post(`/reset_all?admin_user_id=${adminUserId}`);
@@ -8,7 +5,7 @@ export const resetAll = (adminUserId) =>
 export const getChampionPrediction = (userId) => api.get(`/champion/${userId}`);
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+const API_BASE_URL = "http://localhost:8000/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,

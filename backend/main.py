@@ -1,8 +1,6 @@
 from pydantic import Field
-from database import SessionLocal, engine, Base
+from database import SessionLocal
 from models import User, Match, Prediction, ChampionPrediction
-# Crear tablas automáticamente si no existen (después de importar todos los modelos)
-Base.metadata.create_all(bind=engine)
 from pydantic import BaseModel
 from typing import Optional, List
 from fastapi import Body
@@ -632,6 +630,13 @@ def calculate_points_for_match(match_id: int, db: Session):
         prediction.points = points
     
     db.commit()
+    
+from fastapi.responses import FileResponse
+
+@app.get("/download-db")
+def download_db():
+    db_path = "/tmp/quiniela.db"  # O usa "/tmp/quiniela.db" si tu db está ahí
+    return FileResponse(db_path, filename="quiniela.db")
 
 @app.get("/")
 def root():

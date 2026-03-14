@@ -30,8 +30,6 @@ export default function Welcome({user}) {
     return () => clearInterval(interval);
   }, []);
 
-
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 py-10 bg-gradient-to-br from-green-900 via-slate-900 to-black">
       <div className="flex flex-col md:flex-row items-center gap-10 mb-8">
@@ -41,7 +39,6 @@ export default function Welcome({user}) {
           className="w-80 h-auto object-contain drop-shadow-lg bg-white rounded-lg p-2"
         />
         <div className="text-center md:text-left">
-
           <h1 className="text-4xl md:text-5xl font-black text-green-400 mb-2 drop-shadow-lg">
             ¡Te da la bienvenida!
             <br />

@@ -13,7 +13,6 @@ import Predictions from "./components/Predictions";
 import Leaderboard from "./components/Leaderboard";
 import AdminPanel from "./components/AdminPanel";
 import Welcome from "./components/Welcome";
-import Mundial from "./pages/Mundial";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -99,12 +98,6 @@ function App() {
                     className="font-medium hover:text-green-400 transition-colors"
                   >
                     Clasificación
-                  </Link>
-                  <Link
-                    to="/mundial"
-                    className="font-medium hover:text-green-400 transition-colors"
-                  >
-                    El Mundial
                   </Link>
                   {user.is_admin && (
                     <Link
@@ -215,12 +208,6 @@ function App() {
                 ) : (
                   <Navigate to="/partidos" />
                 )
-              }
-            />
-            <Route
-              path="/mundial"
-              element={
-                isValidUser ? <Mundial /> : <Navigate to="/login" />
               }
             />
           </Routes>
