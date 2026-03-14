@@ -263,7 +263,8 @@ def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
 
 @app.get("/api/users", response_model=List[UserResponse])
 def get_users(db: Session = Depends(get_db)):
-    return db.query(User).all()
+    users = db.query(User).all()
+    return [UserResponse.from_orm(user) for user in users]
 
 # Endpoints de Partidos
 @app.post("/api/reset_all", status_code=status.HTTP_200_OK)
