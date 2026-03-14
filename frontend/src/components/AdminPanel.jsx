@@ -190,6 +190,7 @@ function AdminPanel() {
           winner: formData.winner !== undefined ? formData.winner : null,
           is_finished: formData.is_finished,
           phase: formData.phase,
+          stadium: formData.stadium || null,
         };
         await createMatch(payload);
       }
@@ -285,8 +286,11 @@ function AdminPanel() {
         <button
           className="px-6 py-2 rounded-lg font-bold text-white bg-blue-700 hover:bg-blue-600 ml-auto"
           onClick={async () => {
-            const { data } = await exportPredictions();
-            if (!data || data.length === 0) { alert("No hay predicciones para exportar."); return; }
+            const {data} = await exportPredictions();
+            if (!data || data.length === 0) {
+              alert("No hay predicciones para exportar.");
+              return;
+            }
             const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Predicciones");
