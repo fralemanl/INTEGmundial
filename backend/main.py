@@ -68,7 +68,7 @@ class MatchResponse(BaseModel):
             stadium=getattr(obj, 'stadium', None),
         )
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 class PredictionCreate(BaseModel):
     match_id: int
@@ -121,7 +121,7 @@ class ChampionPredictionResponse(BaseModel):
     user_id: int
     team: str
     class Config:
-        from_attributes = True
+        orm_mode = True
 from datetime import datetime
 from typing import List, Optional
 import hashlib
@@ -133,7 +133,7 @@ class UserResponse(BaseModel):
     email: str
     is_admin: bool
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 # Modelo para actualizar usuario
 class UserUpdate(BaseModel):
@@ -263,8 +263,7 @@ def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
 
 @app.get("/api/users", response_model=List[UserResponse])
 def get_users(db: Session = Depends(get_db)):
-    users = db.query(User).all()
-    return [UserResponse.from_orm(user).dict() for user in users]
+    return db.query(User).all()
 
 # Endpoints de Partidos
 @app.post("/api/reset_all", status_code=status.HTTP_200_OK)
