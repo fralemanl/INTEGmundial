@@ -255,13 +255,12 @@ def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
     try:
         user = db.query(User).filter(User.username == credentials.username).first()
         if not user:
-            print(f"Login failed: user '{credentials.username}' not found.")
             raise HTTPException(status_code=401, detail="Usuario no encontrado")
         if not verify_password(credentials.password, user.password):
-            print(f"Login failed: incorrect password for user '{credentials.username}'.")
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
-        print(f"Login success for user '{credentials.username}'.")
         return user
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Login error: {e}")
         raise HTTPException(status_code=500, detail="Error interno en login")
