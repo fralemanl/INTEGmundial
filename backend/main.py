@@ -256,8 +256,19 @@ def login_user(credentials: UserLogin, db: Session = Depends(get_db)):
         user = db.query(User).filter(User.username == credentials.username).first()
         if not user:
             raise HTTPException(status_code=401, detail="Usuario no encontrado")
-        if not verify_password(credentials.password, user.password):
+
+        # Soporte para migración automática SHA-256 → bcrypt
+        # Hash SHA-256 tiene 64 caracteres hex; bcrypt empieza con $2b$
+        import hashlib as _hl
+        sha256_hash = _hl.sha256(credentials.password.encode()).hexdigest()
+        if user.password == sha256_hash:
+            # Contraseña correcta con SHA-256: migrar a bcrypt
+            user.password = hash_password(credentials.password)
+            db.commit()
+            db.refresh(user)
+        elif not verify_password(credentials.password, user.password):
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
+
         return user
     except HTTPException:
         raise
