@@ -5,7 +5,8 @@ export const resetAll = (adminUserId) =>
 export const getChampionPrediction = (userId) => api.get(`/champion/${userId}`);
 import axios from "axios";
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}api`;
+const BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+const API_BASE_URL = `${BASE}/api`;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
